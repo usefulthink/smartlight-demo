@@ -1,17 +1,54 @@
 var socket = io.connect('http://localhost:9000');
 
+navigator.getUserMedia = (
+    navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia
+);
+
+function init(state) {
+    // audio-context and nodes
+    var actx = new AudioContext(),
+        streamSrc = null,
+        analyzer = actx.createAnalyser(),
+        gain = actx.createGain();
+
+    analyzer.fftSize = 32;
+    analyzer.smoothingTimeConstant = .5;
+
+    analyzer.connect(gain);
+    gain.connect(actx.destination);
+
+
+    // get an audio-stream from getUserMedia
+    navigator.getUserMedia({ audio: true }, function(mediaStream) {
+        streamSrc = actx.createMediaStreamSource(mediaStream);
+        streamSrc.connect(analyzer);
+    }, function(err) { console.error(err); });
+
+
+    // initialize buffer and typed-array for frequency-data
+    var buffer = new ArrayBuffer(analyzer.frequencyBinCount);
+
+    state.analyzer = analyzer;
+    state.freqData = new Uint8Array(buffer);
+}
+
+
 function renderFrame(ctx, t, state) {
+    var d = state.freqData;
+    state.analyzer.getByteFrequencyData(d);
+
+    ctx.clearRect(0,0,8,8);
     ctx.save();
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(0,0,8,8);
+    ctx.fillStyle = 'red';
 
-    var xShift = (t/200)%50;
-    ctx.translate(-xShift,0);
+    for(var i=0; i<8; i++) {
+        var v = (d[i])*8/256;
 
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'black';
-    ctx.font = '11px ProFontWindows';
-    ctx.strokeText("JAVASCRIPT",8.5,8);
+        ctx.fillRect(i,8-v,1,v);
+    }
     ctx.restore();
 }
 
@@ -41,6 +78,8 @@ function sendFrame(ctx) {
 
     var tLast = 0,
         state = {};
+
+    init(state);
 
     /**
      * @param t  high resolution timestamp
