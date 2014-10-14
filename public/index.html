@@ -1,0 +1,39 @@
+<head>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Share:400,700">
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/theme/pastel-on-dark.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<header><h1>smart<strong>light</strong></h1></header>
+<div class="canvas-wrap"><canvas width="8" height="8"></canvas></div>
+<div class="editor-wrap">
+<textarea>
+function renderFrame(ctx, t, state) {
+  // update state
+  state.x = ((t/200) % 16) - 4;
+
+  // render it..
+  ctx.clearRect(0,0,8,8);
+  ctx.fillStyle = 'blue';
+  ctx.strokeStyle = 'red';
+  ctx.strokeWidth = 2;
+
+  ctx.beginPath();
+    ctx.arc(state.x, 4, 3, 0, Math.PI*2, true); // Outer circle
+  ctx.closePath();
+
+  ctx.stroke();
+  ctx.fill();
+}
+</textarea>
+</div>
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/mode/javascript/javascript.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="js/main.js"></script>
+<script src="js/editor.js"></script>
+</body>

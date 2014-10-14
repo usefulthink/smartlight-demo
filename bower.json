@@ -1,0 +1,11 @@
+{
+    "name": "smartlight-demo",
+    "version": "0.0.1",
+    "authors": [
+        "Martin Schuhfuss <m.schuhfuss@googlemail.com>"
+    ],
+    "private": true,
+    "dependencies": {
+        "codemirror": "*"
+    }
+}

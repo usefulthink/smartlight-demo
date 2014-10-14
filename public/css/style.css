@@ -1,0 +1,45 @@
+html {
+    color: white;
+    background: black;
+    -webkit-font-smoothing: antialiased;
+}
+body { margin: 20px 0; font-family: Share, sans-serif; }
+
+header {
+    text-align: center;
+    vertical-align: middle;
+    height: 64px;
+}
+header::before {
+    content: '';
+    display: inline-block;
+    width: 64px; height: 100%;
+    vertical-align: middle;
+
+    background: transparent url(test.png) no-repeat;
+    background-size: contain;
+}
+h1 {
+    display: inline-block;
+    font-weight: normal;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.canvas-wrap {
+    position: relative;
+    width: 320px; margin: 50px auto;
+    background-color: #21211d;
+}
+
+.canvas-wrap::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: transparent top left repeat url(bg.png);
+}
+
+canvas { width: 320px; height: 320px; image-rendering: pixelated; }
+
+.editor-wrap {
+    max-width: 640px; margin: 0 auto; border-radius: 5px;
+}
